@@ -193,7 +193,7 @@ function avoidText(x, top, bottom, halfW) {
    根もとがコピーの少し上、花の上端がロゴの下に来る大きさにする */
 function blueRose(limitY, ring) {
   const avail = Math.max(H * 0.3, Math.min(limitY, H) - HEAD_H - 24);
-  const r0 = ring ? avail * 0.19 : Math.min(W * 0.13, avail * 0.19);   // 輪つきは画面の幅で上限を決めず、あとで輪ごと縮める
+  const r0 = ring || narrow ? avail * 0.19 : Math.min(W * 0.13, avail * 0.19);   // 狭い画面は幅で上限を決めず、あとで株ごと縮める
   const make = (r, len) => {
     const it = {};
     renderPlant(it, {
@@ -210,8 +210,8 @@ function blueRose(limitY, ring) {
     return { ...sp, len, head, mid, ring: ring ? Rin + r * 0.5 : 0 };   // 余白をとる
   };
   const b = make(r0, avail - r0 * 3.0);
-  /* 輪が画面の幅に収まらないときは、花も茎も同じ割合で縮める（形は広い画面と同じ） */
-  const fit = ring ? Math.min(1, (W / 2 - 10) / b.ring) : 1;
+  /* 輪（または株）が画面の幅に収まらないときは、花も茎も同じ割合で縮める（形は広い画面と同じ） */
+  const fit = ring ? Math.min(1, (W / 2 - 10) / b.ring) : narrow ? Math.min(1, (W / 2 - 12) / (r0 * 2.4)) : 1;
   return fit < 1 ? make(r0 * fit, (avail - r0 * 3.0) * fit) : b;
 }
 /* 花のまわりを円で囲む文字。drawBlue と同じ (x, y, rot) を渡すと、花の中心に輪を合わせる */
