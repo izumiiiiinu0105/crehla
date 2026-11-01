@@ -387,7 +387,7 @@ html:not([data-theme="light"]) .modal .t-ja{ display:none; }
 @media (max-width:719px){
   /* 文字を上に留めるぶん早く読み終えるように、場面と合う位置へ本文を前へずらす */
   .msg{ position:relative; top:-34svh; align-items:center; justify-content:flex-start; text-align:center; }
-  .msg__body{ position:sticky; top:11svh; }
+  .msg__body{ position:sticky; top:21svh; }
 }
 @media (max-width:600px){
   body{ letter-spacing:.06em; }

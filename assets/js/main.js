@@ -181,10 +181,10 @@ function currentPath(p) {
   }
   return keys[keys.length - 1];
 }
-/* 狭い画面：花の上端が画面の上 1/3 を越えたら下へ押し戻す。
+/* 狭い画面：花の上端が画面の上 46% を越えたら下へ押し戻す。
    広い画面：本文の右端より左へは入らない */
 function avoidText(x, top, bottom, halfW) {
-  if (narrow) return [0, Math.max(0, H * 0.34 - top)];
+  if (narrow) return [0, Math.max(0, H * 0.46 - top)];
   return [Math.max(0, clearX1 - (x - halfW)), 0];
 }
 
@@ -193,23 +193,26 @@ function avoidText(x, top, bottom, halfW) {
    根もとがコピーの少し上、花の上端がロゴの下に来る大きさにする */
 function blueRose(limitY, ring) {
   const avail = Math.max(H * 0.3, Math.min(limitY, H) - HEAD_H - 24);
-  const r = Math.min(W * 0.13, avail * 0.19);
-  /* 輪が画面の幅に収まらないときは、花の大きさはそのままに茎だけ短くする */
-  const len = ring ? Math.min(avail - r * 3.0, (W - 20 - r * 3.1) / 0.96) : avail - r * 3.0;
-  const it = {};
-  renderPlant(it, {
-    S: r / 200, cotScale: 2.0, len, side: 1, seed: 7, boil: 0, palette: PALETTES[light ? 'red' : 'blue'],
-    cot: 0, leaf1: 1, leaf2: 1, thorn: 1, bud: 1, open: 0.95, droop: 1
-  }, r);
-  const sp = it.sprite;
-  /* 根もとと花の中心（drawBlue の座標：茎の中点が原点）。花（半径 1.45r）と根もとをちょうど包む円を、輪にする。
-     花が大きいぶん中心は花のほうへ寄り、株ぜんたいが輪の真ん中に見える */
-  const head = [sp.top[0], sp.top[1] - sp.S * 6 + len / 2], root = [0, len / 2];
-  const d = Math.hypot(head[0] - root[0], head[1] - root[1]), r1 = r * 1.45, r2 = r * 0.1;
-  const Rin = (d + r1 + r2) / 2, k = (Rin - r1) / d;
-  const mid = [head[0] + (root[0] - head[0]) * k, head[1] + (root[1] - head[1]) * k];
-  const R = Math.min(Rin + r * 0.5, W / 2 - 10);   // 余白をとる。画面の幅は越えない
-  return { ...sp, len, head, mid, ring: ring ? R : 0 };
+  const r0 = ring ? avail * 0.19 : Math.min(W * 0.13, avail * 0.19);   // 輪つきは画面の幅で上限を決めず、あとで輪ごと縮める
+  const make = (r, len) => {
+    const it = {};
+    renderPlant(it, {
+      S: r / 200, cotScale: 2.0, len, side: 1, seed: 7, boil: 0, palette: PALETTES[light ? 'red' : 'blue'],
+      cot: 0, leaf1: 1, leaf2: 1, thorn: 1, bud: 1, open: 0.95, droop: 1
+    }, r);
+    const sp = it.sprite;
+    /* 根もとと花の中心（drawBlue の座標：茎の中点が原点）。花（半径 1.45r）と根もとをちょうど包む円を、輪にする。
+       花が大きいぶん中心は花のほうへ寄り、株ぜんたいが輪の真ん中に見える */
+    const head = [sp.top[0], sp.top[1] - sp.S * 6 + len / 2], root = [0, len / 2];
+    const d = Math.hypot(head[0] - root[0], head[1] - root[1]), r1 = r * 1.45, r2 = r * 0.1;
+    const Rin = (d + r1 + r2) / 2, k = (Rin - r1) / d;
+    const mid = [head[0] + (root[0] - head[0]) * k, head[1] + (root[1] - head[1]) * k];
+    return { ...sp, len, head, mid, ring: ring ? Rin + r * 0.5 : 0 };   // 余白をとる
+  };
+  const b = make(r0, avail - r0 * 3.0);
+  /* 輪が画面の幅に収まらないときは、花も茎も同じ割合で縮める（形は広い画面と同じ） */
+  const fit = ring ? Math.min(1, (W / 2 - 10) / b.ring) : 1;
+  return fit < 1 ? make(r0 * fit, (avail - r0 * 3.0) * fit) : b;
 }
 /* 花のまわりを円で囲む文字。drawBlue と同じ (x, y, rot) を渡すと、花の中心に輪を合わせる */
 const RING_SPEED = 0.12;   // 文字の輪が回る速さ（rad/秒。約 52 秒で一周。反時計回り）
@@ -501,7 +504,7 @@ function paint(p, time, dt, dp, boil) {
 
 /* 本文：読んでいる行は差し色、読み終えた行は黒、これからの行は薄く。ロゴの下に来た行は消す */
 function paintText() {
-  const sy = window.scrollY, Rr = H * (narrow ? 0.30 : 0.52);   // 読んでいる行の高さ
+  const sy = window.scrollY, Rr = H * (narrow ? 0.38 : 0.52);   // 読んでいる行の高さ
   for (const ln of msgLines) {
     /* 狭い画面の本文は画面に留まる（sticky）ので、位置は毎回測る */
     let vy = ln.y - sy;
