@@ -1,0 +1,185 @@
+<!doctype html>
+<html data-theme="dark" lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crehla</title>
+<meta name="description" content="Crehlaは、人の想いに寄り添い、アイデアとクリエイティブで幸せの花を咲かせます。">
+<meta name="theme-color" content="#000000" id="theme-color">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="assets/css/style.css?v=6">
+</head>
+<body class="is-loading">
+
+  <!-- スクロール連動モチーフ（背景に固定） -->
+  <div class="stage" aria-hidden="true">
+    <canvas class="stage__canvas" id="motif"></canvas>
+  </div>
+
+  <header class="head">
+    <a class="head__mark" href="#top" aria-label="Crehla">
+      <img class="head__logo" src="assets/img/logo-on-dark.webp?v=5" alt="Crehla" width="1646" height="572">
+    </a>
+  </header>
+
+  <main id="top">
+
+    <section class="hero">
+      <div>
+        <p class="hero__lead reveal" data-reveal lang="en">
+          <span class="line" style="--i:0">An idea is just a seed. Help it bloom for someone.</span>
+        </p>
+      </div>
+      <div class="hero__hint" aria-hidden="true"><span class="hero__dot"></span></div>
+    </section>
+
+    <section class="msg" data-reveal>
+      <p class="msg__body" lang="en">
+        <span class="line" style="--i:0">One day, a tiny seed of an idea landed in someone's heart. It was a feeling they hadn't yet shared with anyone. Then, quietly, the seed cracked open and a first green shoot appeared.</span>
+      </p>
+    </section>
+
+    <section class="msg" data-reveal>
+      <p class="msg__body" lang="en">
+        <span class="line" style="--i:0">The young shoot was fragile, and it couldn't grow on its own. But with someone beside it, listening closely, it reached a little higher each day.</span>
+      </p>
+    </section>
+
+    <section class="msg" data-reveal>
+      <p class="msg__body" lang="en">
+        <span class="line" style="--i:0">Listening to what people feel. Thinking it through together. Giving it shape. Ideas and creativity are the water and light that help a shoot grow, and that is what we want to bring.</span>
+      </p>
+    </section>
+
+    <section class="msg" data-reveal>
+      <p class="msg__body" lang="en">
+        <span class="line" style="--i:0">Leaf by leaf, the days went by, and the tip of the stem began to swell. The bud stayed closed, hidden from view, but inside it, the colors of happiness were already forming.</span>
+      </p>
+    </section>
+
+    <section class="msg" data-reveal>
+      <p class="msg__body" lang="en">
+        <span class="line" style="--i:0">Then, one morning, the bud gently opened. That small idea had met someone's hopes, and it bloomed into a flower of happiness.</span>
+      </p>
+    </section>
+
+    <section class="msg" data-reveal>
+      <p class="msg__body" lang="en">
+        <span class="line" style="--i:0">Crehla stays close to what people feel, and uses ideas and creativity to help flowers of happiness bloom.</span>
+      </p>
+    </section>
+
+    <section class="closing" data-reveal>
+      <p class="closing__body" lang="en">
+        <span class="line" style="--i:0">Grow a flower that's yours alone.</span>
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <nav class="foot__nav" aria-label="フッターリンク">
+      <a class="foot__link" href="#company-profile" data-modal="modal-company">Company Profile</a>
+      <a class="foot__link" href="#privacy-policy" data-modal="modal-privacy">Privacy Policy</a>
+    </nav>
+    <p class="foot__copy">&copy; Crehla</p>
+  </footer>
+
+  <dialog class="modal" id="modal-company" aria-labelledby="modal-company-title" lang="en">
+    <div class="modal__panel">
+      <button class="modal__close" type="button" aria-label="Close" data-close></button>
+      <div class="t-en">
+      <p class="modal__eyebrow">About</p>
+      <h2 class="modal__title" id="modal-company-title">Company Profile</h2>
+      <p class="modal__lead">Crehla stays close to what people feel, and uses ideas and creativity to help flowers of happiness bloom.</p>
+      <dl class="modal__list">
+        <div><dt>Company</dt><dd>Crehla</dd></div>
+        <div><dt>Business</dt><dd><ul class="modal__bullets">
+          <li>Planning, design and development for new business ventures</li>
+          <li>Creative production</li>
+          <li>UI/UX design</li>
+          <li>AI development</li>
+          <li>KPI definition, data preparation, design and analysis for data analytics</li>
+        </ul></dd></div>
+        <div><dt>Representative</dt><dd>Hirotaka Izumi</dd></div>
+        <div><dt>Established</dt><dd>October 28, 2026</dd></div>
+        <div><dt>Address</dt><dd>Setagaya-ku, Tokyo, Japan</dd></div>
+      </dl>
+      </div>
+      <div class="t-ja" lang="ja">
+      <p class="modal__eyebrow">About</p>
+      <h2 class="modal__title" id="modal-company-title-ja">会社概要</h2>
+      <p class="modal__lead">Crehlaは、人の想いに寄り添い、アイデアとクリエイティブで幸せの花を咲かせます</p>
+      <dl class="modal__list">
+        <div><dt>会社名</dt><dd>Crehla</dd></div>
+        <div><dt>事業内容</dt><dd><ul class="modal__bullets">
+          <li>新規事業開発における企画立案、設計、開発業務</li>
+          <li>クリエイティブ制作</li>
+          <li>UI/UXデザイン</li>
+          <li>AI開発</li>
+          <li>データ分析に伴うKPI策定、データ整備、設計、分析</li>
+        </ul></dd></div>
+        <div><dt>代表者</dt><dd>泉 宏隆</dd></div>
+        <div><dt>設立</dt><dd>2026年10月28日</dd></div>
+        <div><dt>所在地</dt><dd>東京都世田谷区</dd></div>
+      </dl>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="modal" id="modal-privacy" aria-labelledby="modal-privacy-title" lang="en">
+    <div class="modal__panel">
+      <button class="modal__close" type="button" aria-label="Close" data-close></button>
+      <div class="t-en">
+      <p class="modal__eyebrow">Legal</p>
+      <h2 class="modal__title" id="modal-privacy-title">Privacy Policy</h2>
+      <p class="modal__meta">Last updated: October 31, 2026</p>
+      <div class="modal__body">
+        <h3>1. Information we collect</h3>
+        <p>We collect basic usage information through Google Analytics 4 (see section 3), such as pages viewed, approximate location, device type, browser and how you arrive at the site. We do not intentionally collect your name, email address or other directly identifying information.</p>
+        <h3>2. How we use information</h3>
+        <p>We use this information only to operate, maintain and improve the site. We do not sell your personal information.</p>
+        <h3>3. Analytics (Google Analytics 4)</h3>
+        <p>We use Google Analytics 4, a web analytics service provided by Google LLC, to understand how visitors use the site. Google Analytics uses cookies and similar technologies to collect usage data, which is sent to and stored on Google's servers, including servers outside your country. IP addresses are not logged or stored by Google Analytics 4.</p>
+        <p>The data is used to produce reports on site usage and is not combined with data that directly identifies you. For details, see Google's policy at policies.google.com/technologies/partner-sites. You can opt out by installing the Google Analytics opt-out browser add-on (tools.google.com/dlpage/gaoptout) or by disabling cookies in your browser.</p>
+        <h3>4. Cookies and local storage</h3>
+        <p>Besides analytics cookies, the site may use cookies or similar technologies for essential functions. You can disable them in your browser settings; the site will continue to work.</p>
+        <h3>5. Sharing with third parties</h3>
+        <p>We do not share personal information with third parties, except service providers who help us run the site (including Google, for analytics), or when required by law.</p>
+        <h3>6. Your choices</h3>
+        <p>You may ask us to access, correct or delete personal information we hold about you by contacting us, and you may opt out of analytics as described above.</p>
+        <h3>7. Changes to this policy</h3>
+        <p>We may update this policy from time to time. The latest version will always be shown here with its date.</p>
+      </div>
+      </div>
+      <div class="t-ja" lang="ja">
+      <p class="modal__eyebrow">Legal</p>
+      <h2 class="modal__title" id="modal-privacy-title-ja">プライバシーポリシー</h2>
+      <p class="modal__meta">最終更新日：2026年10月31日</p>
+      <div class="modal__body">
+        <h3>1. 取得する情報</h3>
+        <p>Google アナリティクス 4（第3項参照）を通じて、閲覧したページ、おおよその地域、端末やブラウザの種類、サイトへの流入元などの利用情報を取得します。氏名やメールアドレスなど、個人を直接特定できる情報を意図して取得することはありません。</p>
+        <h3>2. 利用目的</h3>
+        <p>取得した情報は、当サイトの運営・維持・改善のためにのみ利用します。個人情報を販売することはありません。</p>
+        <h3>3. アクセス解析（Google アナリティクス 4）</h3>
+        <p>当サイトでは、利用状況を把握するために、Google LLC が提供するアクセス解析サービス「Google アナリティクス 4」を使用しています。Google アナリティクスは Cookie などの技術を用いて利用データを収集し、そのデータは Google のサーバー（国外のサーバーを含みます）に送信・保存されます。Google アナリティクス 4 では、IP アドレスは記録・保存されません。</p>
+        <p>収集したデータは、サイトの利用状況のレポート作成に使用し、個人を直接特定する情報とは結びつけません。詳細は Google のポリシー（policies.google.com/technologies/partner-sites）をご覧ください。Google アナリティクス オプトアウト アドオン（tools.google.com/dlpage/gaoptout）の導入、またはブラウザの設定で Cookie を無効にすることで、計測を停止できます。</p>
+        <h3>4. Cookie とローカルストレージ</h3>
+        <p>解析のための Cookie のほか、サイトの基本機能のために Cookie などを使用する場合があります。ブラウザの設定で無効にしても、サイトはご利用いただけます。</p>
+        <h3>5. 第三者への提供</h3>
+        <p>サイトの運営を支援する事業者（アクセス解析の Google を含みます）への提供、および法令に基づく場合を除き、個人情報を第三者に提供しません。</p>
+        <h3>6. 利用者の選択</h3>
+        <p>当社が保有するご自身の個人情報の開示・訂正・削除をご希望の場合は、お問い合わせください。アクセス解析は、上記の方法で停止できます。</p>
+        <h3>7. 本ポリシーの改定</h3>
+        <p>本ポリシーは、必要に応じて改定することがあります。最新版は、日付とともにこのページに掲載します。</p>
+      </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="assets/js/main.js?v=7"></script>
+  <script type="module" src="assets/js/modal.js?v=3"></script>
+</body>
+</html>

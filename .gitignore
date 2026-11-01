@@ -1,0 +1,10 @@
+.DS_Store
+__pycache__/
+
+# サイトでは使っていない作業ファイル
+README.md
+blender/
+crayon/
+assets/js/main-3d.js
+assets/js/main-svg.js
+assets/models/

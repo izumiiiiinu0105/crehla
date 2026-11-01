@@ -1,0 +1,397 @@
+/* =========================================================
+   Crehla — brand message page
+   ========================================================= */
+
+:root{
+  /* surface */
+  --paper:      #FFFFFF;
+  --paper-sub:  #F3F2F0;
+  --ink:        #1A1A1C;
+  --ink-soft:   #585A5E;
+  --rule:       rgba(26,26,28,.16);
+
+  /* 花の色：ビビッドなフラット7色 */
+  --c1:#E03A26;  /* 朱     */
+  --c2:#1C4C96;  /* 紺     */
+  --c3:#0E9D9D;  /* 青緑   */
+  --c4:#EFA01E;  /* 山吹   */
+  --c5:#F2A6AC;  /* 淡紅   */
+  --c6:#FAEDEF;  /* 生成り */
+  --c7:#EF6B4A;  /* 珊瑚   */
+
+  /* 花びらに置く小さな差し色 */
+  --a1:#EFA01E;
+  --a2:#1C4C96;
+  --a3:#EF6B4A;
+  --a4:#FFFFFF;
+
+  --rose-line:#FFFFFF; /* 花弁の境目 */
+  --seed:#8A5A3B;      /* 種 */
+  --accent:#1C4C96;    /* 読んでいる行 */
+  --stem:#7CBF46; /* 茎 */
+  --leaf:#8ECB57; /* 葉 */
+  --tie:#B9AE9B;  /* 花束を束ねる帯 */
+
+  --gut: clamp(20px, 5vw, 56px);
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:     #000000;
+    --paper-sub: #111114;
+    --ink:       #F1EFEA;
+    --ink-soft:  #A6ABBB;
+    --rule:      rgba(241,239,234,.16);
+    --c1:#F0553C; --c2:#3A6FC4; --c3:#1BBDBD;
+    --c4:#FFB838; --c5:#F6B8BD; --c6:#FFF4F6; --c7:#FF8160;
+    --a1:#FFB838; --a2:#2B5DB0; --a3:#FF8160; --a4:#FFFFFF;
+    --rose-line:#F4F2EE; --seed:#B07A55; --accent:#8FB2EE;
+    --stem:#8FD055; --leaf:#A0DC68; --tie:#6E6552;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#000000; --paper-sub:#111114; --ink:#F1EFEA; --ink-soft:#A6ABBB;
+  --rule:rgba(241,239,234,.16);
+  --c1:#F0553C; --c2:#3A6FC4; --c3:#1BBDBD;
+  --c4:#FFB838; --c5:#F6B8BD; --c6:#FFF4F6; --c7:#FF8160;
+  --a1:#FFB838; --a2:#2B5DB0; --a3:#FF8160; --a4:#FFFFFF;
+  --rose-line:#F4F2EE; --seed:#B07A55; --accent:#8FB2EE;
+  --stem:#8FD055; --leaf:#A0DC68; --tie:#6E6552;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ scroll-behavior:smooth; }
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  transition:background-color .7s ease, color .7s ease;
+  font-family:"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN",
+              "Noto Sans JP","Yu Gothic",sans-serif;
+  font-weight:400;
+  line-height:2.2;
+  letter-spacing:.09em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+
+/* ---------- 背景モチーフ ---------- */
+.stage{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+.stage__canvas,
+.stage__svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+/* WebGL が使えないときに差し込まれる SVG 版のための指定 */
+.stage__svg{ --stem-w:2px; }
+.stage__svg .stem{
+  fill:none;
+  stroke:var(--stem);
+  stroke-width:var(--stem-w);
+  stroke-linecap:round;
+}
+.stage__svg .tie{ fill:var(--tie); }
+
+/* ---------- 円をなぞると背景が切り替わる ---------- */
+.ring-hit{
+  position:fixed;
+  inset:0;
+  z-index:3;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  touch-action:none;
+}
+.ring-hit circle{
+  fill:none;
+  stroke:transparent;
+  pointer-events:stroke;   /* 円の線の太さぶんだけが操作できる。内側は普通にスクロールできる */
+  touch-action:none;
+  cursor:grab;
+  outline:none;
+}
+.ring-hit circle:active{ cursor:grabbing; }
+.ring-hit circle:focus-visible{ stroke:var(--rule); }
+
+/* ---------- 最後に舞い散る花びら ---------- */
+.veil{
+  position:fixed;
+  inset:0;
+  z-index:3;
+  background:var(--paper);
+  opacity:0;
+  pointer-events:none;
+}
+.petals{
+  position:fixed;
+  inset:0;
+  z-index:5;
+  width:100%;
+  height:100%;
+  display:none;
+  pointer-events:none;
+}
+
+/* ---------- ヘッダー ---------- */
+.head{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:4;
+  padding:clamp(18px,3vw,28px) var(--gut);
+  opacity:0;
+  transform:translateY(-6px);
+  transition:opacity .9s var(--ease) 1.1s, transform .9s var(--ease) 1.1s;
+}
+body.is-ready .head{ opacity:1; transform:none; }
+
+.head__mark{
+  display:inline-block;
+  line-height:0;
+  text-decoration:none;
+}
+.head__logo{
+  display:block;
+  width:auto;
+  height:clamp(26px,3vw,32px);
+}
+.head__mark:focus-visible{ outline:2px solid var(--c1); outline-offset:6px; border-radius:2px; }
+
+/* ---------- 共通レイアウト ---------- */
+main{ position:relative; z-index:2; }
+
+.hero,.closing{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:18svh var(--gut);
+  text-align:center;
+}
+
+/* メッセージは左寄せ。空いた右側を大きな株が通る */
+.msg{
+  min-height:64svh;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  padding:6svh var(--gut);
+  text-align:left;
+}
+
+/* ---------- 行アニメーション ---------- */
+.line{
+  display:block;
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .95s var(--ease), transform .95s var(--ease);
+  transition-delay:calc(var(--i,0) * 130ms);
+}
+.is-visible .line{ opacity:1; transform:none; }
+
+/* ---------- ヒーロー ---------- */
+.hero{ justify-content:flex-end; padding-bottom:11svh; min-height:100svh; }
+
+.hero__lead{
+  color:transparent;   /* 見えるのは薔薇を囲む輪の文字。ここは読み上げと位置取り用に残す */
+  margin:0;
+  font-size:clamp(17px,2.3vw,25px);
+  font-weight:400;
+  letter-spacing:.18em;
+  line-height:2.3;
+}
+
+.hero__hint{ margin-top:clamp(36px,6vh,60px); height:10px; }
+.hero__dot{
+  display:block;
+  width:7px; height:7px;
+  border-radius:50%;
+  background:var(--c1);
+  opacity:0;
+  animation:hint 2.4s var(--ease) infinite;
+  animation-delay:1.6s;
+}
+@keyframes hint{
+  0%   { opacity:0; transform:translateY(-8px); }
+  28%  { opacity:1; transform:translateY(0); }
+  70%  { opacity:1; transform:translateY(10px); }
+  100% { opacity:0; transform:translateY(18px); }
+}
+
+/* ---------- メッセージ ---------- */
+.msg__body{
+  margin:0;
+  font-size:clamp(15px,1.7vw,19px);
+  line-height:2.6;
+  letter-spacing:.13em;
+  color:var(--ink);
+}
+
+/* 本文の行は、画面中央に近いものほど濃く出す（JSが毎フレーム設定する）。
+   前後の行は薄く残るので、読んでいる箇所が自然に浮かび上がる。 */
+.msg .line{
+  opacity:0;
+  transform:none;
+  transition:color .4s var(--ease);
+  white-space:nowrap;   /* 行は意図して区切ってあるので、行の途中では折り返さない */
+}
+.msg .line.is-current{ color:var(--accent); }
+
+/* 英語は改行を入れず、段落として自然に折り返す */
+.msg__body[lang="en"]{ max-width:34em; line-height:2; letter-spacing:.04em; }
+.msg__body[lang="en"] .line{ white-space:normal; }
+
+/* ---------- クロージング ---------- */
+.closing{ min-height:120svh; justify-content:flex-end; padding-bottom:9svh; }
+.closing__body{
+  margin:0;
+  font-size:clamp(19px,2.8vw,32px);
+  line-height:2.2;
+  letter-spacing:.17em;
+  font-weight:400;
+}
+
+.closing__body[lang="en"]{ letter-spacing:.06em; }
+
+/* ---------- フッター ---------- */
+.foot{
+  position:relative;
+  z-index:2;
+  background:var(--paper-sub);
+  border-top:1px solid var(--rule);
+  padding:clamp(28px,4vw,40px) var(--gut) clamp(24px,3vw,32px);
+  text-align:center;
+}
+.foot__nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:clamp(16px,3vw,40px);
+  justify-content:center;
+}
+.foot__link{
+  color:var(--ink);
+  text-decoration:none;
+  font-size:13px;
+  letter-spacing:.14em;
+  line-height:1.9;
+  border-bottom:1px solid transparent;
+  transition:border-color .3s var(--ease), opacity .3s var(--ease);
+}
+.foot__link:hover{ border-bottom-color:var(--rule); }
+.foot__link:focus-visible{ outline:2px solid var(--c1); outline-offset:5px; border-radius:2px; }
+
+.foot__copy{
+  margin:14px 0 0;
+  font-family:"Jost",sans-serif;
+  font-size:11px;
+  letter-spacing:.2em;
+  color:var(--ink-soft);
+  opacity:.75;
+}
+
+/* ---------- ポップアップ（会社概要・プライバシーポリシー） ---------- */
+html.is-modal{ overflow:hidden; }
+.modal{
+  width:min(560px, calc(100vw - 32px));
+  max-height:min(82svh, 720px);
+  margin:auto;
+  padding:0;
+  border:1px solid var(--rule);
+  border-radius:14px;
+  background:var(--paper);
+  color:var(--ink);
+  box-shadow:0 24px 70px rgba(0,0,0,.35);
+  overflow:auto;
+  overscroll-behavior:contain;
+}
+.modal::backdrop{ background:rgba(0,0,0,.55); backdrop-filter:blur(3px); }
+.modal[open]{ animation:modal-in .35s var(--ease); }
+@keyframes modal-in{ from{ opacity:0; transform:translateY(14px) scale(.985); } to{ opacity:1; transform:none; } }
+.modal__panel{ position:relative; padding:clamp(28px,5vw,44px) clamp(22px,5vw,44px) clamp(28px,5vw,40px); }
+.modal__close{
+  position:absolute; top:12px; right:12px;
+  width:40px; height:40px;
+  border:0; border-radius:50%;
+  background:transparent; color:var(--ink);
+  cursor:pointer;
+}
+.modal__close::before,.modal__close::after{
+  content:""; position:absolute; left:50%; top:50%;
+  width:18px; height:1.5px; background:currentColor;
+  transform:translate(-50%,-50%) rotate(45deg);
+}
+.modal__close::after{ transform:translate(-50%,-50%) rotate(-45deg); }
+.modal__close:hover{ background:var(--rule); }
+.modal__close:focus-visible{ outline:2px solid var(--c1); outline-offset:2px; }
+.modal__eyebrow{
+  margin:0;
+  font-family:"Jost",sans-serif; font-weight:300;
+  font-size:12px; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.modal__title{
+  margin:6px 0 0;
+  font-family:"Jost","Zen Kaku Gothic New",sans-serif; font-weight:400;
+  font-size:clamp(24px,4vw,30px); letter-spacing:.06em; line-height:1.4;
+}
+.modal__lead{ margin:18px 0 0; font-size:15px; line-height:2; letter-spacing:.06em; }
+.modal__meta{ margin:10px 0 0; font-size:12px; letter-spacing:.1em; color:var(--ink-soft); line-height:1.8; }
+.modal__list{ margin:26px 0 0; border-top:1px solid var(--rule); }
+.modal__list > div{
+  display:grid; grid-template-columns:7.5em 1fr; gap:6px 16px;
+  padding:14px 0; border-bottom:1px solid var(--rule);
+}
+.modal__list dt{ font-size:12px; letter-spacing:.14em; color:var(--ink-soft); line-height:1.9; }
+.modal__list dd{ margin:0; font-size:14px; letter-spacing:.05em; line-height:1.9; }
+.modal__bullets{ margin:0; padding:0; list-style:none; }
+.modal__bullets li{ position:relative; padding-left:1.1em; }
+.modal__bullets li + li{ margin-top:4px; }
+.modal__bullets li::before{ content:""; position:absolute; left:0; top:.95em; width:5px; height:5px; border-radius:50%; background:var(--ink-soft); }
+.modal__body{ margin-top:22px; }
+.modal__body h3{ margin:26px 0 0; font-size:14px; font-weight:500; letter-spacing:.08em; line-height:1.8; }
+.modal__body p{ margin:6px 0 0; font-size:13.5px; line-height:2; letter-spacing:.04em; color:var(--ink-soft); }
+/* 背景が白のときは日本語、黒のときは英語 */
+.modal [hidden]{ display:none !important; }
+html[data-theme="light"] .modal .t-en{ display:none; }
+html:not([data-theme="light"]) .modal .t-ja{ display:none; }
+@media (max-width:480px){
+  .modal__list > div{ grid-template-columns:1fr; gap:0; }
+}
+
+/* ---------- 低モーション設定 ---------- */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  .line{ opacity:1; transform:none; transition:none; }
+  .head{ opacity:1; transform:none; transition:none; }
+  .hero__dot{ animation:none; opacity:1; }
+}
+
+/* ---------- 広い画面：本文を左端ではなく、少し中央へ寄せる ---------- */
+@media (min-width:720px){
+  .msg{ padding-left:clamp(var(--gut), 15vw, 320px); }
+}
+
+/* ---------- スマートフォン ---------- */
+/* 本文は画面の上 1/3 に中央揃えで出す（株はその下を通る） */
+@media (max-width:719px){
+  /* 文字を上に留めるぶん早く読み終えるように、場面と合う位置へ本文を前へずらす */
+  .msg{ position:relative; top:-34svh; align-items:center; justify-content:flex-start; text-align:center; }
+  .msg__body{ position:sticky; top:11svh; }
+}
+@media (max-width:600px){
+  body{ letter-spacing:.06em; }
+  .hero,.msg,.closing{ padding-left:16px; padding-right:16px; }
+  .msg__body{ line-height:2.4; }
+  .foot__nav{ gap:14px 24px; }
+}
